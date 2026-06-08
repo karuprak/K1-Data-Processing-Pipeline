@@ -52,10 +52,12 @@ can directly impact client reporting accuracy.
 
 ### Fund Level Summary
 ![Fund Summary](K-1%20Project/fund_summary.png)
-![Review Flags](K-1%20Project/review_flags.png)
 
 ### Data Quality Review Flags
+![Review Flags](K-1%20Project/review_flags.png)
 
+### Discrepancy
+![discrepancy](K-1%20Project/discrepancy.png)
 
 ## Key Findings
 - Goldman Sachs 2025: **$2,000 discrepancy** vs fund manager report
