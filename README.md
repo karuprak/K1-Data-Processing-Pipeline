@@ -66,6 +66,25 @@ can directly impact client reporting accuracy.
 - 1 record flagged: Missing partner name (Paul McCoy fund)
 - 1 record flagged: All zeros — needs review (David Okafor, Ultimus)
 
+## Recommended Actions
+
+| Record | Issue | Recommended Action |
+|---|---|---|
+| Goldman Sachs Alternatives Fund I (2025) | $2,000 discrepancy vs fund manager report | Re-request confirmation from fund manager — verify if amended K-1 is pending |
+| Paul McCoy Family Office Fund III (2023) | $24,000 discrepancy vs fund manager report | Escalate to senior analyst — gap exceeds $10,000 threshold, requires immediate reconciliation |
+| Paul McCoy Family Office Fund III (2023) | Missing partner name | Contact fund administrator to provide full legal name matching TIN 901-34-7823 |
+| David Okafor — Ultimus Private Equity Fund II (2024) | All zeros across all financial fields | Verify with fund manager whether partner had zero activity or if data was not submitted |
+
+## Processing Status Summary
+
+| Status | Count |
+|---|---|
+| Clean — Ready for client reporting | 7 |
+| Flagged — Pending review | 2 |
+| Discrepancies requiring reconciliation | 2 |
+| Total records processed | 9 |
+
+
 ## Funds Processed
 | Fund | Tax Year | Partners |
 |---|---|---|
