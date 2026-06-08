@@ -48,6 +48,14 @@ can directly impact client reporting accuracy.
 4. **Partner Ranking** — Ranks all partners by total income using RANK()
 5. **Flag Update** — Writes review classifications back to the database
 
+   ## Query Results
+
+### Fund Level Summary
+![Fund Summary](K-1%20Project/data/fund_summary.png)
+
+### Data Quality Review Flags
+![Review Flags](K-1%20Project/data/review_flags.png)
+
 ## Key Findings
 - Goldman Sachs 2025: **$2,000 discrepancy** vs fund manager report
 - Paul McCoy 2023: **$24,000 discrepancy** vs fund manager report
