@@ -1,0 +1,10 @@
+fund_name,ein,tax_year,partner_name,partner_tin,partner_type,ordinary_income,net_rental_income,interest_income,capital_gains_long,distributions,review_flag
+Goldman Sachs Alternatives Fund I,81-4256789,2025,James Whitfield,412-78-9034,Limited Partner,125000,0,3200,48000,75000,
+Goldman Sachs Alternatives Fund I,81-4256789,2025,Priya Nambiar,532-91-4421,Limited Partner,98000,0,2800,31000,50000,
+Goldman Sachs Alternatives Fund I,81-4256789,2025,Robert Chen,671-34-8821,General Partner,210000,15000,5400,92000,120000,
+Ultimus Private Equity Fund II,47-8931245,2024,Sandra Moore,334-56-7890,Limited Partner,76000,8200,1500,22000,40000,
+Ultimus Private Equity Fund II,47-8931245,2024,David Okafor,445-23-6712,Limited Partner,0,0,0,0,0,
+Ultimus Private Equity Fund II,47-8931245,2024,Linda Zhao,556-78-3345,Limited Partner,143000,0,4100,67000,90000,
+Paul McCoy Family Office Fund III,63-7412890,2023,Thomas McCoy,778-45-2310,General Partner,320000,42000,8900,175000,200000,
+Paul McCoy Family Office Fund III,63-7412890,2023,Rachel McCoy,889-12-5567,Limited Partner,95000,18000,2200,43000,60000,
+Paul McCoy Family Office Fund III,63-7412890,2023,,901-34-7823,Limited Partner,61000,0,1800,28000,35000,
