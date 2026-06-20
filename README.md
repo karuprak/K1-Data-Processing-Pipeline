@@ -29,7 +29,7 @@ can directly impact client reporting accuracy.
 | fund_name | Name of the private investment fund |
 | ein | Fund's Employer Identification Number |
 | tax_year | Tax year of the K-1 |
-| partner_name | Name of the partner/investor |
+| partner\_name | Name of the partner/investor |
 | partner_tin | Partner's Tax Identification Number |
 | partner_type | General or Limited Partner |
 | ordinary_income | Box 1 — Ordinary business income |
@@ -70,8 +70,8 @@ can directly impact client reporting accuracy.
 
 | Record | Issue | Recommended Action |
 |---|---|---|
-| Goldman Sachs Alternatives Fund I (2025) | $2,000 discrepancy vs fund manager report | Re-request confirmation from fund manager — verify if amended K-1 is pending |
-| Paul McCoy Family Office Fund III (2023) | $24,000 discrepancy vs fund manager report | Escalate to senior analyst — gap exceeds $10,000 threshold, requires immediate reconciliation |
+| Goldman Sachs Alternatives Fund I (2025) | $2,000 discrepancy vs fund manager report | Re-request confirmation from fund manager. Verify if amended K-1 is pending |
+| Paul McCoy Family Office Fund III (2023) | $24,000 discrepancy vs fund manager report | Escalate to senior analyst. Gap exceeds $10,000 threshold, requires immediate reconciliation |
 | Paul McCoy Family Office Fund III (2023) | Missing partner name | Contact fund administrator to provide full legal name matching TIN 901-34-7823 |
 | David Okafor — Ultimus Private Equity Fund II (2024) | All zeros across all financial fields | Verify with fund manager whether partner had zero activity or if data was not submitted |
 
