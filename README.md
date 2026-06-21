@@ -77,7 +77,7 @@ Every record classified automatically — Clean, Missing Partner Name, or All Ze
 ## Step 3 — Detailed Reconciliation
 Each income field compared separately against fund manager reported figures.
 
-![Reconciliation](K-1%20Project/descrepancies.png)
+![Reconciliation](K-1%20Project/discrepancies.png)
 
 ---
 
