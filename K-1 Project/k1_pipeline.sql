@@ -5,7 +5,7 @@
 -- Description: Processes Schedule K-1 tax data
 -- across 3 private investment funds, flags
 -- data quality issues, and reconciles fund
--- manager reports against individual K-1 totals.
+-- reported totals against individual K-1 records.
 -- ============================================
 
 -- STEP 1: Create Database
@@ -43,64 +43,112 @@ VALUES
 ('Paul McCoy Family Office Fund III','63-7412890',2023,'Rachel McCoy','889-12-5567','Limited Partner',95000,18000,2200,43000,60000,'Clean'),
 ('Paul McCoy Family Office Fund III','63-7412890',2023,NULL,'901-34-7823','Limited Partner',61000,0,1800,28000,35000,'Missing Partner Name');
 
--- STEP 4: Create Fund Summary Table (Fund Manager Reports)
+-- STEP 4: Create Fund Summary Table (Fund Reported Totals)
 CREATE TABLE fund_summary (
     fund_name VARCHAR(100),
     tax_year INT,
-    reported_total_income DECIMAL(15,2)
+    reported_ordinary_income DECIMAL(15,2),
+    reported_rental_income DECIMAL(15,2),
+    reported_interest_income DECIMAL(15,2),
+    reported_capital_gains DECIMAL(15,2),
+    reported_distributions DECIMAL(15,2)
 );
 
 INSERT INTO fund_summary VALUES
-('Goldman Sachs Alternatives Fund I', 2025, 435000.00),
-('Ultimus Private Equity Fund II', 2024, 219000.00),
-('Paul McCoy Family Office Fund III', 2023, 500000.00);
+('Goldman Sachs Alternatives Fund I', 2025, 435000.00, 15000.00, 11400.00, 173000.00, 247000.00),
+('Ultimus Private Equity Fund II', 2024, 219000.00, 8200.00, 7100.00, 89000.00, 130000.00),
+('Paul McCoy Family Office Fund III', 2023, 500000.00, 60000.00, 13000.00, 248000.00, 297000.00);
 
 -- ============================================
 -- ANALYSIS QUERIES
 -- ============================================
 
--- Query 1: Total Income Per Fund
-SELECT 
-    fund_name,
-    tax_year,
-    COUNT(partner_name) AS total_partners,
-    SUM(ordinary_income) AS total_ordinary_income,
-    SUM(capital_gains_long) AS total_capital_gains,
-    SUM(distributions) AS total_distributions
-FROM k1_data
-GROUP BY fund_name, tax_year
-ORDER BY tax_year DESC;
-
--- Query 2: Flag Missing and Zero Records
+-- Query 1: Raw Data Overview
 SELECT 
     fund_name,
     partner_name,
-    partner_tin,
+    tax_year,
     ordinary_income,
-    CASE
-        WHEN partner_name IS NULL THEN 'Missing Name'
-        WHEN ordinary_income = 0 THEN 'Zero Income - Review'
-        ELSE 'Clean'
-    END AS review_flag
-FROM k1_data;
+    net_rental_income,
+    interest_income,
+    capital_gains_long,
+    distributions,
+    review_flag
+FROM k1_data
+ORDER BY tax_year DESC;
 
--- Query 3: Reconciliation - Fund Manager vs K-1 Totals
+-- Query 2: Data Quality Flags
+SELECT 
+    fund_name,
+    partner_name,
+    ordinary_income,
+    review_flag
+FROM k1_data
+ORDER BY review_flag;
+
+-- Query 3: Detailed Reconciliation
 SELECT 
     fs.fund_name,
     fs.tax_year,
-    fs.reported_total_income AS fund_manager_reported,
-    SUM(kd.ordinary_income) AS k1_actual_total,
-    fs.reported_total_income - SUM(kd.ordinary_income) AS discrepancy,
-    CASE
-        WHEN fs.reported_total_income = SUM(kd.ordinary_income) THEN 'Match'
-        ELSE 'Discrepancy Found'
-    END AS status
+    'Ordinary Income' AS field_name,
+    fs.reported_ordinary_income AS fund_reported,
+    SUM(kd.ordinary_income) AS k1_actual,
+    fs.reported_ordinary_income - SUM(kd.ordinary_income) AS gap,
+    CASE WHEN fs.reported_ordinary_income = SUM(kd.ordinary_income) 
+    THEN 'Match' ELSE 'Discrepancy' END AS status
 FROM fund_summary fs
-JOIN k1_data kd 
-    ON fs.fund_name = kd.fund_name 
-    AND fs.tax_year = kd.tax_year
-GROUP BY fs.fund_name, fs.tax_year, fs.reported_total_income
-ORDER BY fs.tax_year DESC;
+JOIN k1_data kd ON fs.fund_name = kd.fund_name AND fs.tax_year = kd.tax_year
+GROUP BY fs.fund_name, fs.tax_year, fs.reported_ordinary_income
+
+UNION ALL
+
+SELECT 
+    fs.fund_name, fs.tax_year, 'Rental Income',
+    fs.reported_rental_income, SUM(kd.net_rental_income),
+    fs.reported_rental_income - SUM(kd.net_rental_income),
+    CASE WHEN fs.reported_rental_income = SUM(kd.net_rental_income) 
+    THEN 'Match' ELSE 'Discrepancy' END
+FROM fund_summary fs
+JOIN k1_data kd ON fs.fund_name = kd.fund_name AND fs.tax_year = kd.tax_year
+GROUP BY fs.fund_name, fs.tax_year, fs.reported_rental_income
+
+UNION ALL
+
+SELECT 
+    fs.fund_name, fs.tax_year, 'Interest Income',
+    fs.reported_interest_income, SUM(kd.interest_income),
+    fs.reported_interest_income - SUM(kd.interest_income),
+    CASE WHEN fs.reported_interest_income = SUM(kd.interest_income) 
+    THEN 'Match' ELSE 'Discrepancy' END
+FROM fund_summary fs
+JOIN k1_data kd ON fs.fund_name = kd.fund_name AND fs.tax_year = kd.tax_year
+GROUP BY fs.fund_name, fs.tax_year, fs.reported_interest_income
+
+UNION ALL
+
+SELECT 
+    fs.fund_name, fs.tax_year, 'Capital Gains',
+    fs.reported_capital_gains, SUM(kd.capital_gains_long),
+    fs.reported_capital_gains - SUM(kd.capital_gains_long),
+    CASE WHEN fs.reported_capital_gains = SUM(kd.capital_gains_long) 
+    THEN 'Match' ELSE 'Discrepancy' END
+FROM fund_summary fs
+JOIN k1_data kd ON fs.fund_name = kd.fund_name AND fs.tax_year = kd.tax_year
+GROUP BY fs.fund_name, fs.tax_year, fs.reported_capital_gains
+
+UNION ALL
+
+SELECT 
+    fs.fund_name, fs.tax_year, 'Distributions',
+    fs.reported_distributions, SUM(kd.distributions),
+    fs.reported_distributions - SUM(kd.distributions),
+    CASE WHEN fs.reported_distributions = SUM(kd.distributions) 
+    THEN 'Match' ELSE 'Discrepancy' END
+FROM fund_summary fs
+JOIN k1_data kd ON fs.fund_name = kd.fund_name AND fs.tax_year = kd.tax_year
+GROUP BY fs.fund_name, fs.tax_year, fs.reported_distributions
+
+ORDER BY tax_year DESC, fund_name, field_name;
 
 -- Query 4: Partner Ranking by Total Income
 SELECT 
@@ -108,15 +156,19 @@ SELECT
     fund_name,
     tax_year,
     ordinary_income,
+    net_rental_income,
+    interest_income,
     capital_gains_long,
     distributions,
-    (ordinary_income + capital_gains_long) AS total_income,
-    RANK() OVER (ORDER BY (ordinary_income + capital_gains_long) DESC) AS income_rank
+    (ordinary_income + net_rental_income + interest_income + capital_gains_long) AS total_income,
+    RANK() OVER (ORDER BY (ordinary_income + net_rental_income + interest_income + capital_gains_long) DESC) AS income_rank
 FROM k1_data
 WHERE partner_name IS NOT NULL
 ORDER BY income_rank;
 
--- Query 5: Final Review Flag Summary
-SELECT review_flag, COUNT(*) AS record_count
+-- Query 5: Processing Status Summary
+SELECT 
+    review_flag AS status,
+    COUNT(*) AS record_count
 FROM k1_data
 GROUP BY review_flag;
