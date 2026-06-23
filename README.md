@@ -1,7 +1,7 @@
-# K-1 Data Processing Pipeline
+# K-1 Tax Data Processing & Reconciliation
 
 ## Overview
-A SQL-based pipeline that processes Schedule K-1 private investment tax data 
+A system that processes Schedule K-1 private investment tax data 
 across three funds — modeled after real Arch clients: Goldman Sachs, Ultimus, 
 and Paul McCoy Family Office.
 
